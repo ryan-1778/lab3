@@ -1,0 +1,35 @@
+## Complete Task 1 before answering the following question.
+
+# What is the PID of the process that executed /usr/bin/whoami? (2 points)
+
+
+
+## Complete Task 2 before answering the following questions.
+
+# How many processes are referenced in the audit log? (1 point)
+
+
+
+# How many files/directories are referenced in the audit log? (1 point)
+
+
+
+## Complete Task 3 before answering the following question.
+
+# What is the PID of the process that accessed /home/bob/database.db? (2 points)
+
+
+
+## Complete Task 4 before answering the following questions.
+
+# What files were read using /usr/bin/cat? (2 points)
+#
+# Note: Your answer doesn't have to include ELFs or shared objects read during 
+# process creation. What files did the *user* of cat read?
+
+
+
+# This audit log contains an attack used to gain access to database.db. In a few 
+# sentences, describe the attack. (2 points)
+
+
