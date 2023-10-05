@@ -99,6 +99,79 @@ def parse_events(audit_fp):
 
 def build_graph(graph, events):
     # TODO: Insert your code here!
+        #task1 
+        if sys.argv[2] == 'task1.dot':
+            for eid in events:
+                for element in events.get(eid):
+                    if  element['type'] == 'SYSCALL':
+                        graph.add_edge(element['ppid'], element['pid'])
+                        graph.nodes[element['pid']]['label'] = (element['pid'] + " " + element['exe'])
+                        pid = element['pid']
+            #print(graph.number_of_nodes())
+            print("Saving graph to: %s" % sys.argv[2])
+            nx.drawing.nx_pydot.write_dot(graph, sys.argv[2])
+        #task 2-4
+        else:
+            for eid in events:
+                #graph.countNodes
+                #53 nodes from task1
+                #369 nodes from task2
+                #8 nodes from task3
+                #62 nodes from task4
+                #task2 stuff
+                pid = ''
+                path = ''
+                cwd = ''
+                for element in events.get(eid):
+                    if  element['type'] == 'SYSCALL':
+                        graph.add_edge(element['ppid'], element['pid'])
+                        graph.nodes[element['pid']]['label'] = (element['pid'] + " " + element['exe'])
+                        pid = element['pid']
+                    elif element['type'] == 'CWD':
+                        cwd = element['cwd']
+                    elif element['type'] == 'PATH':
+                        path = element['name']
+                        joinedPath = os.path.join(cwd[1:-1], path[1:-1])
+                        normalizedPath = os.path.normpath(joinedPath)
+                        graph.add_edge(pid, '"' + normalizedPath + '"')
+
+            if sys.argv[2] == 'task2.dot':   
+                #print(graph.number_of_nodes())
+                print("Saving graph to: %s" % sys.argv[2])
+                nx.drawing.nx_pydot.write_dot(graph, sys.argv[2])     
+
+            #task3 stuff (use dfs for reverse provenance)
+            if sys.argv[2] == 'task3.dot':
+
+                #create new graph
+                subGraph = nx.DiGraph()
+                subGraph.add_edges_from(list(nx.dfs_edges(graph.reverse(), source='"/home/bob/database.db"')))   
+
+                for node, attribute in subGraph.nodes(data=True):
+                    if 'label' in graph.nodes(data=True)[node]:
+                        attribute['label'] = graph.nodes(data=True)[node]['label']
+
+                #print(subGraph.number_of_nodes())
+
+                print("Saving graph to: %s" % sys.argv[2])
+                nx.drawing.nx_pydot.write_dot(subGraph, sys.argv[2]) 
+            
+            #task4 stuff (use bfs for forward provenance)
+            if sys.argv[2] == 'task4.dot':
+              
+                # #create new graph
+                subGraph = nx.DiGraph()
+                subGraph.add_edges_from(list(nx.bfs_edges(graph, source='1654')))
+                # #print(subGraph.number_of_nodes())
+
+                for node, attribute in subGraph.nodes(data=True):
+                    if 'label' in graph.nodes(data=True)[node]:
+                        attribute['label'] = graph.nodes(data=True)[node]['label']
+
+                #print(subGraph.number_of_nodes())
+                print("Saving graph to: %s" % sys.argv[2])
+                nx.drawing.nx_pydot.write_dot(subGraph, sys.argv[2]) 
+
 
 def main():
     if len(sys.argv) != 3:
@@ -110,8 +183,8 @@ def main():
 
     build_graph(graph, events)
 
-    print("Saving graph to: %s" % sys.argv[2])
-    nx.drawing.nx_pydot.write_dot(graph, sys.argv[2])
+    # print("Saving graph to: %s" % sys.argv[2])
+    #nx.drawing.nx_pydot.write_dot(graph, sys.argv[2])
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,17 @@
+strict digraph  {
+"/home/bob/database.db";
+1660 [label="1660 \"/usr/bin/cat\""];
+1654 [label="1654 \"/usr/bin/bash\""];
+1653 [label="1653 \"/usr/bin/dash\""];
+1648 [label="1648 \"/usr/sbin/apache2\""];
+1647 [label="1647 \"/usr/sbin/apache2\""];
+1 [label="1 \"/usr/lib/systemd/systemd\""];
+0;
+"/home/bob/database.db" -> 1660;
+1660 -> 1654;
+1654 -> 1653;
+1653 -> 1648;
+1648 -> 1647;
+1647 -> 1;
+1 -> 0;
+}
